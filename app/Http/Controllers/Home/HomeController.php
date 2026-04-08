@@ -22,9 +22,29 @@ use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('home.index');
+        $query = Course::with(['category', 'subCategory', 'user'])
+            ->withCount([
+                'reviews',
+                'enrollments',
+                'enrollments as is_enrolled' => function ($q) {
+                    if (Auth::check()) {
+                        $q->where('user_id', Auth::id());
+                    }
+                }
+            ])
+            ->where('status', 'published');
+
+
+
+        $courses = $query->paginate(20);
+        $categories = Category::all();
+        $subcategories = SubCategory::all();
+
+        $wishlistIds  = Auth::check() ? Wishlist::where('user_id', Auth::id())->pluck('course_id')->toArray() : [];
+        $cartIds = Auth::check() ? Cart::where('user_id', Auth::id())->pluck('course_id')->toArray() : [];
+        return view('home.index', compact('courses', 'categories', 'subcategories', 'wishlistIds', 'cartIds'));
     }
 
     public function about()

@@ -15,6 +15,8 @@
   {{-- FontAwesome --}}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 
+
+
   {{-- Toastr CSS (GLOBAL) --}}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
@@ -32,6 +34,10 @@
   <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
   <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
     #chat-toggle {
       position: fixed;
       bottom: 20px;
@@ -66,7 +72,7 @@
     }
 
     .chat-header {
-      background: #4f46e5;
+      background: #0B8E96;
       color: white;
       padding: 12px;
       font-weight: bold;
@@ -90,7 +96,7 @@
     }
 
     .user-message {
-      background: #4f46e5;
+      background: #0B8E96;
       color: white;
       padding: 8px 12px;
       border-radius: 10px;
@@ -112,7 +118,7 @@
     }
 
     #send-btn {
-      background: #4f46e5;
+      background: #0B8E96;
       color: white;
       border: none;
       padding: 10px 15px;
@@ -151,11 +157,11 @@
   <div id="chat-container">
     <div class="chat-header">
       LMS Assistant
-      <span id="chat-close">✖</span>
+      <span id="chat-close"><i class="fas fa-close"></i></span>
     </div>
 
     <div class="chat-body" id="chat-body">
-      <div class="bot-message">Hello 👋 How can I help you?</div>
+
     </div>
 
     <div class="chat-footer">

@@ -90,77 +90,160 @@
       border-color: var(--primary-color);
     }
 
+    /* ========== COURSE CARD STYLES (matching your course listing page) ========== */
     .course-card {
       border: none;
       font-size: 14px;
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      height: 100%;
     }
 
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
 
     .course-card img {
       height: 140px;
       object-fit: cover;
+      width: 100%;
+      border-bottom: 1px solid rgb(212, 205, 205);
     }
 
     .course-card .card-title {
       font-size: 14px;
       font-weight: 600;
+      margin-bottom: 0.5rem;
     }
 
     .course-card .card-text {
       font-size: 12px;
+      color: #6c757d;
+      margin-bottom: 0.8rem;
+    }
+
+    /* Position relative for overlay buttons */
+    .position-relative {
+      position: relative;
+    }
+
+    .card-img-overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: auto;
+      bottom: auto;
+      padding: 0.75rem;
+      background: transparent;
+    }
+
+    /* Wishlist button */
+    .wishlist-btn {
+      background: white;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #e74c3c;
+      transition: all 0.2s;
+      border: none;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .wishlist-btn:hover {
+      background: #e74c3c;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    /* Category badge */
+    .course-card .badge.bg-light {
+      background: #f1f5f9 !important;
+      color: #2b2d42;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    /* Course meta info */
+    .course-meta {
+      font-size: 0.75rem;
+      color: #6c757d;
+      margin-bottom: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .course-meta i {
+      margin-right: 0.2rem;
+      color: var(--accent-color, #0C9DA7);
     }
 
     .course-meta span {
       font-size: 12px;
     }
 
+    /* Price styling */
     .course-price {
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .course-badge {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: var(--accent-color);
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .course-price {
-      font-size: 1.5rem;
       font-weight: 700;
-      color: var(--primary-color);
+      font-size: 1.1rem;
+      color: var(--primary-color, #0B8E96);
     }
 
-    .card-img-top {
-      border: 1px solid rgb(212, 205, 205)
+    .course-price.text-dark {
+      color: #2b2d42;
     }
 
-    .course-price.free {
-      color: #28a745;
+    /* Buttons inside card */
+    .btn-primary {
+      background-color: #0C9DA7;
+      border: 1px solid #0C9DA7;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.75rem;
+      border-radius: 30px;
+      transition: all 0.2s;
     }
 
-    .course-meta {
-      font-size: 0.9rem;
-      color: #6c757d;
+    .btn-primary:hover {
+      background-color: #0DA3AD;
+      transform: translateY(-2px);
     }
 
-    .course-meta i {
-      margin-right: 0.25rem;
+    .btn-success {
+      background-color: #28a745;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
     }
 
+    /* Cart hover button (hidden by default, shown on card hover) */
+    .cart-hover-btn {
+      display: inline-block;
+    }
+
+    /* For the "Add to Cart" button that appears on hover (optional) */
+    .course-card .cart-hover-btn .btn {
+      transition: all 0.2s;
+    }
+
+    /* Star rating small */
+    .text-warning small {
+      font-size: 0.7rem;
+    }
+
+    /* No courses fallback */
     .no-courses {
       text-align: center;
-      padding: 5rem 2rem;
+      padding: 3rem;
     }
 
     .no-courses i {
-      font-size: 4rem;
+      font-size: 3rem;
       color: #dee2e6;
       margin-bottom: 1rem;
     }
@@ -451,7 +534,7 @@
 
         {{-- Courses Display --}}
         <div id="coursesContainer">
-          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3" id="coursesGrid">
+          {{-- <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3" id="coursesGrid">
             @forelse ($courses as $course)
               <div class="col">
                 <div class="card course-card">
@@ -546,6 +629,93 @@
                   <h4>No courses found</h4>
                   <p class="text-muted">Try adjusting your search or filter to find what you're looking for.</p>
                   <a href="{{ route('courses.course_index') }}" class="btn btn-primary">Clear Filters</a>
+                </div>
+              </div>
+            @endforelse
+          </div> --}}
+
+          <div class="row g-4" id="coursesGrid">
+            @forelse ($courses as $course)
+              <div class="col-lg-4 col-md-6">
+                <div class="card course-card h-100">
+                  <div class="position-relative">
+                    <img src="{{ asset('storage/' . $course->thumbnail) }}" class="card-img-top"
+                      alt="{{ $course->title }}">
+                    <div class="card-img-overlay d-flex align-items-start justify-content-end">
+                      <form action="{{ route('wishlist.add', $course->id) }}" method="POST">
+                        @csrf
+                        <button class="btn btn-light btn-sm rounded-circle wishlist-btn" type="submit">
+                          <i class="{{ in_array($course->id, $wishlistIds) ? 'fas' : 'far' }} fa-heart"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <span class="badge bg-light text-dark">{{ $course->category->name ?? 'General' }} >
+                        {{ $course->subCategory->name ?? 'Misc' }}</span>
+                      <div class="text-warning">
+                        <i class="fas fa-star"></i>
+                        <small>{{ $course->reviews_avg_rating ?? 0 }}</small>
+                      </div>
+                    </div>
+                    <h5 class="card-title mb-2">{{ Str::limit($course->title, 50) }}</h5>
+                    <p class="card-text text-muted mb-3">{!! Str::limit(strip_tags($course->description), 100) !!}</p>
+
+                    <div class="course-meta mb-3">
+                      <span class="me-3">
+                        <i class="fas fa-user-graduate"></i>
+                        {{ $course->enrollments_count ?? 0 }} students
+                      </span>
+                      <span class="me-3">
+                        <i class="fas fa-clock"></i>
+                        {{ $course->duration ?? 'N/A' }} hours
+                      </span>
+                      <span>
+                        <i class="fas fa-eye"></i>
+                        {{ $course->views ?? 0 }} Views
+                      </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        @if (!auth()->check() || !auth()->user()->canAccessCourse($course->id))
+                          @if ($course->pricing && $course->pricing->price > 0)
+                            <div class="course-price text-dark">
+                              {{ $course->pricing->currency_symbol ?? '$' }}{{ $course->pricing->price }}
+                            </div>
+                          @else
+                            <div class="course-price text-dark">FREE</div>
+                          @endif
+                        @endif
+                      </div>
+                      <a href="{{ route('courses.course_show', $course->slug) }}" class="btn btn-primary btn-sm">
+                        {{ auth()->check() && ($course->is_enrolled ?? false) ? 'Go to course' : 'View Course' }}
+                      </a>
+                      <div class="cart-hover-btn">
+                        <form action="{{ route('cart.add', $course->id) }}" method="POST">
+                          @csrf
+                          @if (in_array($course->id, $cartIds))
+                            <button class="btn btn-success btn-sm" disabled>
+                              <i class="fas fa-check me-1"></i> Added
+                            </button>
+                          @else
+                            <button class="btn btn-primary btn-sm" type="submit">
+                              <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                            </button>
+                          @endif
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            @empty
+              <div class="col-12">
+                <div class="no-courses">
+                  <i class="fas fa-book-open"></i>
+                  <h4>No courses found</h4>
+                  <p class="text-muted">Check back soon for new courses.</p>
                 </div>
               </div>
             @endforelse

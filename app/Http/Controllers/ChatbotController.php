@@ -16,19 +16,36 @@ class ChatbotController extends Controller
         // i want to get all the database tables and their columns and send it to the chatbot as context for the question
         $tables = DB::select('SHOW TABLES');
         $schema = [];
+        $dataSummary = [];
+
         foreach ($tables as $table) {
             $tableName = $table->{'Tables_in_' . env('DB_DATABASE')};
-            $columns = DB::select("SHOW COLUMNS FROM $tableName");
-            $schema[$tableName] = array_map(function ($column) {
-                return $column->Field;
-            }, $columns);
-        }
-        $prompt = "You are a helpful assistant for a Learning Management System (LMS). The user will ask questions about the LMS, and you should provide accurate and concise answers based on the following database schema:\n\n";
-        foreach ($schema as $table => $columns) {
-            $prompt .= "Table: $table\nColumns: " . implode(', ', $columns) . "\n\n";
-        }
-        $prompt .= "User's question: $userMessage\nAnswer:";
 
+            try {
+                // Get columns
+                $columns = DB::select("SHOW COLUMNS FROM $tableName");
+                $schema[$tableName] = array_map(function ($column) {
+                    return $column->Field;
+                }, $columns);
+
+                // Get count
+                $count = DB::table($tableName)->count();
+                $dataSummary[$tableName] = $count;
+            } catch (\Exception $e) {
+                $dataSummary[$tableName] = 'N/A';
+            }
+        }
+        $prompt = "You are a helpful assistant for a Learning Management System (LMS).\n";
+        $prompt .= "Use the database structure and data summary below.\n\n";
+
+        foreach ($schema as $table => $columns) {
+            $prompt .= "Table: $table\n";
+            $prompt .= "Columns: " . implode(', ', $columns) . "\n";
+            $prompt .= "Total Records: " . ($dataSummary[$table] ?? 'N/A') . "\n\n";
+        }
+
+        $prompt .= "User's question: $userMessage\n";
+        $prompt .= "Answer in simple words. Do NOT write SQL queries.";
 
 
         $response = Http::withHeaders([
